@@ -192,46 +192,5 @@ spec:
  $ kubectl delete clusterrole nginx-ingress
  $ kubectl delete clusterrolebinding nginx-ingress
  ```
-
-## Ingress with Https Using Self Signed Certificates:
-
-### Generate self signed certificates
-```
-$ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -out mithun-ingress-tls.crt -keyout mithun-ingress-tls.key -subj "/CN=javawebapp.mithuntechdevops.co.in/O=mithun-ingress-tls"
-
-# Create secret for with your certificate .key & .crt file
-
-$ kubectl create secret tls mithun-ingress-tls --namespace default --key mithun-ingress-tls.key --cert mithun-ingress-tls.crt
-```
-### Mention tls/ssl(certificate) details in ingress
-```
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: mithuntechappingressrule
-  namespace: test-ns
-spec:
-  ingressClassName: nginx
-  tls:
-  - hosts:
-      - mithuntechdevops.co.in
-    secretName: mithun-ingress-tls
-  rules:
-  - host: mithuntechdevops.co.in
-    http:
-      paths:
-      - pathType: Prefix
-        path: "/java-web-app"
-        backend:
-          service:
-            name: javawebappsvc
-            port:
-              number: 80
-      - pathType: Prefix
-        path: "/maven-web-application"
-        backend:
-          service:
-            name: mavenwebappsvc
-            port:
               number: 80
 ```
